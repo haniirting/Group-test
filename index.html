@@ -1,299 +1,240 @@
 
-
 <!DOCTYPE html>
-
 <html lang="ru">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Group Tester MAX</title>
-
-  <style>
-
-    * { box-sizing: border-box; }
-
-    body {
-
-      margin: 0;
-
-      min-height: 100vh;
-
-      display: grid;
-
-      place-items: center;
-
-      padding: 20px;
-
-      background: #080b12;
-
-      color: #f4f7ff;
-
-      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-
-    }
-
-    .panel {
-
-      width: 100%;
-
-      max-width: 430px;
-
-      padding: 25px;
-
-      border: 1px solid #263344;
-
-      border-radius: 22px;
-
-      background: #101722;
-
-      box-shadow: 0 0 35px #00d5ff12;
-
-    }
-
-    h1 { margin: 0 0 8px; font-size: 26px; }
-
-    .sub { color: #98a9bd; margin-bottom: 24px; }
-
-    label {
-
-      display: block;
-
-      margin-bottom: 9px;
-
-      color: #cbd7e7;
-
-    }
-
-    input {
-
-      width: 100%;
-
-      padding: 14px;
-
-      border: 1px solid #34465b;
-
-      border-radius: 12px;
-
-      background: #080e17;
-
-      color: white;
-
-      font-size: 15px;
-
-      outline: none;
-
-    }
-
-    input:focus { border-color: #00d5ff; }
-
-    button {
-
-      width: 100%;
-
-      margin-top: 12px;
-
-      padding: 14px;
-
-      border: 0;
-
-      border-radius: 12px;
-
-      background: #00d5ff;
-
-      color: #041018;
-
-      font-size: 15px;
-
-      font-weight: 700;
-
-      cursor: pointer;
-
-    }
-
-    button.secondary {
-
-      background: #202d3d;
-
-      color: #f4f7ff;
-
-    }
-
-    .result {
-
-      margin-top: 18px;
-
-      padding: 14px;
-
-      border-radius: 12px;
-
-      background: #080e17;
-
-      color: #b8c8dc;
-
-      line-height: 1.5;
-
-      overflow-wrap: anywhere;
-
-    }
-
-    .small {
-
-      margin-top: 18px;
-
-      color: #8293a8;
-
-      font-size: 12px;
-
-      line-height: 1.5;
-
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Group Tester MAX</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080b12;color:#f4f7ff;font-family:Arial,sans-serif;padding:20px}
+main{max-width:440px;margin:25px auto}
+.card{background:#111925;border:1px solid #29394d;border-radius:18px;padding:22px;margin-bottom:16px}
+h1{font-size:25px;margin:0 0 8px}
+h2{font-size:19px}
+.muted{color:#94a6bd;font-size:14px;line-height:1.5}
+input{display:block;width:100%;margin:10px 0;padding:14px;border-radius:10px;border:1px solid #34465b;background:#080e17;color:white;font-size:15px}
+button{width:100%;padding:13px;margin-top:10px;border:0;border-radius:10px;background:#00d5ff;color:#061018;font-weight:bold;font-size:15px}
+button.secondary{background:#243246;color:white}
+.hidden{display:none!important}
+.result{margin-top:14px;padding:13px;background:#080e17;border-radius:10px;overflow-wrap:anywhere;line-height:1.5}
+</style>
 </head>
-
 <body>
-
-  <main class="panel">
-
+<main>
+  <section class="card">
     <h1>⚡ Group Tester MAX</h1>
+    <p class="muted">Тестирование ссылок и управление профилем</p>
+  </section>
 
-    <div class="sub">Проверка ссылок-приглашений</div>
+  <section class="card" id="auth">
+    <h2 id="authTitle">Создать аккаунт</h2>
+    <p class="muted">Демонстрационная регистрация на этом устройстве.</p>
+    <input id="username" placeholder="Логин" maxlength="24" autocomplete="username">
+    <input id="password" type="password" placeholder="Пароль" minlength="6" autocomplete="new-password">
+    <button id="authButton" onclick="register()">Зарегистрироваться</button>
+    <button class="secondary" id="switchButton" onclick="switchMode()">Уже есть аккаунт? Войти</button>
+    <div class="result" id="authResult">Придумай логин и пароль от 6 символов.</div>
+  </section>
 
-    <label for="invite">Ссылка на группу MAX</label>
+  <section class="card hidden" id="profile">
+    <h2>👤 Мой профиль</h2>
+    <p>Логин: <b id="profileName"></b></p>
+    <p>Проверок выполнено: <b id="totalTests">0</b></p>
+    <button class="secondary" onclick="logout()">Выйти из аккаунта</button>
+  </section>
 
-    <input
+  <section class="card hidden" id="tester">
+    <h2>🧪 Проверка ссылки</h2>
+    <input id="invite" placeholder="https://max.ru/join/...">
+    <button onclick="checkLink()">Проверить формат</button>
+    <button class="secondary" onclick="openInvite()">Открыть приглашение</button>
+    <div class="result" id="testResult">Вставь ссылку MAX.</div>
+  </section>
 
-      id="invite"
+  <section class="card hidden" id="historyCard">
+    <h2>📋 История проверок</h2>
+    <div id="history" class="muted">Пока проверок нет.</div>
+    <button class="secondary" onclick="clearHistory()">Очистить историю</button>
+  </section>
 
-      type="url"
+  <p class="muted">
+    Важно: аккаунты хранятся только в этом браузере.
+    Не используй реальные или важные пароли. Очистка данных
+    браузера может удалить аккаунты. Система не проверяет
+    действительность приглашения и не создаёт аккаунты MAX.
+  </p>
+</main>
 
-      placeholder="https://max.ru/join/..."
+<script>
+const $ = id => document.getElementById(id);
+const USERS_KEY = "gtmax_demo_users_v1";
+const SESSION_KEY = "gtmax_demo_session_v1";
+let mode = "register";
 
-      autocomplete="url"
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY) || "{}"); }
+  catch { return {}; }
+}
 
-    >
+function saveUsers(users) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
 
-    <button onclick="checkLink()">Проверить ссылку</button>
+function switchMode() {
+  mode = mode === "register" ? "login" : "register";
+  $("authTitle").textContent = mode === "register" ? "Создать аккаунт" : "Вход";
+  $("authButton").textContent = mode === "register" ? "Зарегистрироваться" : "Войти";
+  $("switchButton").textContent = mode === "register"
+    ? "Уже есть аккаунт? Войти"
+    : "Нет аккаунта? Зарегистрироваться";
+  $("password").setAttribute("autocomplete", mode === "register" ? "new-password" : "current-password");
+  $("authResult").textContent = "";
+}
 
-    <button class="secondary" onclick="openInvite()">
+function register() {
+  const name = $("username").value.trim();
+  const pass = $("password").value;
+  const users = getUsers();
 
-      Открыть приглашение
+  if (!/^[a-zA-Z0-9_-]{3,24}$/.test(name)) {
+    $("authResult").textContent = "Логин: 3–24 символа, только латинские буквы, цифры, _ или -.";
+    return;
+  }
+  if (pass.length < 6) {
+    $("authResult").textContent = "Пароль должен содержать минимум 6 символов.";
+    return;
+  }
 
-    </button>
-
-    <div id="result" class="result">
-
-      Вставь ссылку, чтобы начать проверку.
-
-    </div>
-
-    <div class="small">
-
-      Проверяется только формат адреса. Для подтверждения
-
-      действительности приглашения открой его в MAX.
-
-      Никакие аккаунты автоматически не создаются.
-
-    </div>
-
-  </main>
-
-  <script>
-
-    const invite = document.getElementById("invite");
-
-    const result = document.getElementById("result");
-
-    function getValidLink() {
-
-      const value = invite.value.trim();
-
-      try {
-
-        const url = new URL(value);
-
-        if (
-
-          url.protocol !== "https:" ||
-
-          url.hostname !== "max.ru" ||
-
-          !url.pathname.startsWith("/join/") ||
-
-          url.pathname.length <= "/join/".length
-
-        ) {
-
-          return null;
-
-        }
-
-        return url.href;
-
-      } catch {
-
-        return null;
-
-      }
-
+  if (mode === "register") {
+    if (users[name.toLowerCase()]) {
+      $("authResult").textContent = "Этот логин уже занят на этом устройстве.";
+      return;
     }
-
-    function checkLink() {
-
-      if (!invite.value.trim()) {
-
-        result.textContent = "Вставь ссылку на приглашение.";
-
-        return;
-
-      }
-
-      if (!getValidLink()) {
-
-        result.textContent =
-
-          "❌ Неверный формат. Ожидается ссылка вида https://max.ru/join/...";
-
-        return;
-
-      }
-
-      result.textContent =
-
-        "✅ Формат ссылки правильный. Работает ли приглашение, нужно проверить в MAX.";
-
+    users[name.toLowerCase()] = { name, password: pass, tests: 0, history: [] };
+    saveUsers(users);
+  } else {
+    const user = users[name.toLowerCase()];
+    if (!user || user.password !== pass) {
+      $("authResult").textContent = "Неверный логин или пароль.";
+      return;
     }
+  }
 
-    function openInvite() {
+  localStorage.setItem(SESSION_KEY, name.toLowerCase());
+  $("password").value = "";
+  showApp();
+}
 
-      const link = getValidLink();
+function currentUser() {
+  const key = localStorage.getItem(SESSION_KEY);
+  if (!key) return null;
+  const users = getUsers();
+  return users[key] ? { key, user: users[key], users } : null;
+}
 
-      if (!link) {
+function showApp() {
+  const session = currentUser();
+  if (!session) {
+    $("auth").classList.remove("hidden");
+    ["profile","tester","historyCard"].forEach(id => $(id).classList.add("hidden"));
+    return;
+  }
+  $("auth").classList.add("hidden");
+  ["profile","tester","historyCard"].forEach(id => $(id).classList.remove("hidden"));
+  $("profileName").textContent = session.user.name;
+  $("totalTests").textContent = session.user.tests;
+  renderHistory(session.user.history);
+}
 
-        result.textContent = "Сначала вставь ссылку правильного формата.";
+function logout() {
+  localStorage.removeItem(SESSION_KEY);
+  $("authResult").textContent = "Ты вышел из аккаунта.";
+  showApp();
+}
 
-        return;
+function getInviteLink() {
+  try {
+    const url = new URL($("invite").value.trim());
+    if (url.protocol !== "https:" || url.hostname !== "max.ru" ||
+        !url.pathname.startsWith("/join/") ||
+        url.pathname.length <= 6) return null;
+    return url.href;
+  } catch { return null; }
+}
 
-      }
+function checkLink() {
+  const session = currentUser();
+  if (!session) return;
 
-      window.location.href = link;
+  const link = getInviteLink();
+  let message;
 
-    }
+  if (!link) {
+    message = "❌ Неверный формат. Нужна ссылка вида https://max.ru/join/...";
+  } else {
+    message = "✅ Формат ссылки правильный. Её действительность ещё не проверена.";
+  }
 
-    invite.addEventListener("keydown", event => {
+  $("testResult").textContent = message;
 
-      if (event.key === "Enter") checkLink();
+  const { key, user, users } = session;
+  user.tests++;
+  user.history.unshift({
+    link: $("invite").value.trim(),
+    result: link ? "Формат правильный" : "Неверный формат",
+    date: new Date().toLocaleString("ru-RU")
+  });
+  user.history = user.history.slice(0, 20);
+  users[key] = user;
+  saveUsers(users);
+  showApp();
+}
 
-    });
+function openInvite() {
+  const link = getInviteLink();
+  if (!link) {
+    $("testResult").textContent = "Сначала вставь ссылку правильного формата.";
+    return;
+  }
+  location.href = link;
+}
 
-  </script>
+function renderHistory(items) {
+  $("history").replaceChildren();
+  if (!items || !items.length) {
+    $("history").textContent = "Пока проверок нет.";
+    return;
+  }
 
+  items.forEach(item => {
+    const entry = document.createElement("div");
+    entry.className = "result";
+    const date = document.createElement("div");
+    date.textContent = item.date;
+    const status = document.createElement("div");
+    status.textContent = item.result;
+    const link = document.createElement("div");
+    link.textContent = item.link;
+    entry.append(date, status, link);
+    $("history").append(entry);
+  });
+}
+
+function clearHistory() {
+  const session = currentUser();
+  if (!session) return;
+  session.user.history = [];
+  session.users[session.key] = session.user;
+  saveUsers(session.users);
+  renderHistory([]);
+}
+
+try {
+  showApp();
+} catch {
+  $("authResult").textContent = "Браузер не разрешает хранение данных. Попробуй открыть сайт в обычном браузере.";
+}
+</script>
 </body>
-
 </html>
