@@ -1,240 +1,469 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Group Tester MAX</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080b12;color:#f4f7ff;font-family:Arial,sans-serif;padding:20px}
-main{max-width:440px;margin:25px auto}
-.card{background:#111925;border:1px solid #29394d;border-radius:18px;padding:22px;margin-bottom:16px}
-h1{font-size:25px;margin:0 0 8px}
-h2{font-size:19px}
-.muted{color:#94a6bd;font-size:14px;line-height:1.5}
-input{display:block;width:100%;margin:10px 0;padding:14px;border-radius:10px;border:1px solid #34465b;background:#080e17;color:white;font-size:15px}
-button{width:100%;padding:13px;margin-top:10px;border:0;border-radius:10px;background:#00d5ff;color:#061018;font-weight:bold;font-size:15px}
-button.secondary{background:#243246;color:white}
-.hidden{display:none!important}
-.result{margin-top:14px;padding:13px;background:#080e17;border-radius:10px;overflow-wrap:anywhere;line-height:1.5}
+:root {
+  --bg: #090d18;
+  --panel: #121a2b;
+  --border: #263650;
+  --blue: #477bff;
+  --text: #f3f6ff;
+  --muted: #98a8c5;
+  --green: #38d9a9;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at top, #172747, var(--bg) 65%);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  background: #0b1120cc;
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(12px);
+  z-index: 2;
+}
+.nav {
+  max-width: 950px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.logo { font-weight: 900; font-size: 20px; }
+.logo span { color: #72a0ff; }
+main { max-width: 950px; padding: 28px 16px 60px; margin: auto; }
+.card {
+  background: #121a2bf2;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 12px 35px #0002;
+}
+.hero { padding: 28px 22px; }
+h1 { font-size: clamp(27px, 6vw, 42px); margin: 0 0 12px; }
+h2 { font-size: 21px; margin: 0 0 16px; }
+p { color: var(--muted); line-height: 1.6; }
+label { display: block; margin: 14px 0 7px; color: #c8d5ee; font-size: 14px; }
+input {
+  width: 100%;
+  background: #0b1221;
+  color: white;
+  border: 1px solid #30415f;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+}
+input:focus { border-color: var(--blue); }
+button {
+  background: var(--blue);
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 17px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+button:hover { filter: brightness(1.12); }
+button.secondary { background: #202e48; border: 1px solid #354865; }
+button.danger { background: #6f293b; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.full { width: 100%; margin-top: 16px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.status {
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-top: 14px;
+  line-height: 1.5;
+  background: #1b2940;
+  overflow-wrap: anywhere;
+}
+.status.ok { background: #10392f; color: #8ff5d5; }
+.status.error { background: #421e2b; color: #ffb8c7; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+.stat { background: #0b1221; padding: 15px; border-radius: 14px; }
+.stat strong { display: block; font-size: 24px; margin-bottom: 5px; }
+.stat span { font-size: 12px; color: var(--muted); }
+.item {
+  border-bottom: 1px solid var(--border);
+  padding: 13px 0;
+  overflow-wrap: anywhere;
+}
+.item:last-child { border-bottom: 0; }
+footer { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; }
+@media (max-width: 480px) {
+  .card { padding: 17px; }
+  .stats { grid-template-columns: 1fr; }
+  .nav { align-items: flex-start; }
+}
 </style>
 </head>
 <body>
+
+<header>
+  <div class="nav">
+    <div class="logo">GROUP <span>TESTER</span></div>
+    <div id="navUser" class="muted small">Демо-платформа</div>
+  </div>
+</header>
+
 <main>
-  <section class="card">
-    <h1>⚡ Group Tester MAX</h1>
-    <p class="muted">Тестирование ссылок и управление профилем</p>
+  <section class="card hero">
+    <h1>Проверяй ссылки <span style="color:#79a4ff">MAX</span></h1>
+    <p>Личный кабинет для тестирования приглашений. Проверяй формат ссылки, сохраняй историю и управляй профилем.</p>
+    <div class="status">Важно: сайт проверяет только формат адреса. Он не может подтвердить, что приглашение действительно существует или доступно.</div>
   </section>
 
-  <section class="card" id="auth">
-    <h2 id="authTitle">Создать аккаунт</h2>
-    <p class="muted">Демонстрационная регистрация на этом устройстве.</p>
-    <input id="username" placeholder="Логин" maxlength="24" autocomplete="username">
-    <input id="password" type="password" placeholder="Пароль" minlength="6" autocomplete="new-password">
-    <button id="authButton" onclick="register()">Зарегистрироваться</button>
-    <button class="secondary" id="switchButton" onclick="switchMode()">Уже есть аккаунт? Войти</button>
-    <div class="result" id="authResult">Придумай логин и пароль от 6 символов.</div>
+  <section id="auth">
+    <div class="card">
+      <h2 id="authTitle">Создать аккаунт</h2>
+      <p id="authSubtitle">Зарегистрируйся, чтобы открыть личный кабинет.</p>
+      <form id="authForm">
+        <label for="username">Логин</label>
+        <input id="username" minlength="3" maxlength="24" autocomplete="username" required placeholder="Придумай логин">
+        <label for="password">Пароль</label>
+        <input id="password" type="password" minlength="6" maxlength="100" autocomplete="new-password" required placeholder="Минимум 6 символов">
+        <button id="authSubmit" class="full" type="submit">Зарегистрироваться</button>
+      </form>
+      <div id="authMessage" class="status hidden"></div>
+      <div class="actions">
+        <button id="switchAuth" class="secondary full" type="button">У меня уже есть аккаунт</button>
+      </div>
+      <p class="small">Это демонстрационная регистрация. Данные хранятся только в этом браузере, без настоящего сервера. Не используй свой реальный пароль.</p>
+    </div>
   </section>
 
-  <section class="card hidden" id="profile">
-    <h2>👤 Мой профиль</h2>
-    <p>Логин: <b id="profileName"></b></p>
-    <p>Проверок выполнено: <b id="totalTests">0</b></p>
-    <button class="secondary" onclick="logout()">Выйти из аккаунта</button>
-  </section>
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <h2>Личный кабинет</h2>
+      <p>Привет, <strong id="profileName"></strong>!</p>
+      <div class="stats">
+        <div class="stat"><strong id="totalChecks">0</strong><span>Всего проверок</span></div>
+        <div class="stat"><strong id="validChecks">0</strong><span>Похожи на ссылку MAX</span></div>
+        <div class="stat"><strong id="createdAt">—</strong><span>Аккаунт создан</span></div>
+      </div>
+      <div class="actions">
+        <button id="logout" class="secondary" type="button">Выйти</button>
+        <button id="deleteAccount" class="danger" type="button">Удалить аккаунт</button>
+      </div>
+    </div>
 
-  <section class="card hidden" id="tester">
-    <h2>🧪 Проверка ссылки</h2>
-    <input id="invite" placeholder="https://max.ru/join/...">
-    <button onclick="checkLink()">Проверить формат</button>
-    <button class="secondary" onclick="openInvite()">Открыть приглашение</button>
-    <div class="result" id="testResult">Вставь ссылку MAX.</div>
-  </section>
+    <div class="card">
+      <h2>Проверка приглашения</h2>
+      <label for="inviteUrl">Ссылка на группу или чат MAX</label>
+      <input id="inviteUrl" type="url" placeholder="https://max.ru/join/..." autocomplete="url">
+      <div class="actions">
+        <button id="checkLink" type="button">Проверить ссылку</button>
+        <button id="clearLink" class="secondary" type="button">Очистить</button>
+      </div>
+      <div id="checkResult" class="status hidden"></div>
+      <div id="openActions" class="actions hidden">
+        <button id="openInvite" type="button">Открыть приглашение</button>
+        <button id="copyInvite" class="secondary" type="button">Копировать ссылку</button>
+      </div>
+      <p class="small">Открытие MAX происходит только после нажатия кнопки. Проверка формата не гарантирует действительность приглашения.</p>
+    </div>
 
-  <section class="card hidden" id="historyCard">
-    <h2>📋 История проверок</h2>
-    <div id="history" class="muted">Пока проверок нет.</div>
-    <button class="secondary" onclick="clearHistory()">Очистить историю</button>
+    <div class="card">
+      <h2>История проверок</h2>
+      <div id="history"><p>Пока проверок нет.</p></div>
+      <button id="clearHistory" class="secondary" type="button">Очистить историю</button>
+    </div>
   </section>
-
-  <p class="muted">
-    Важно: аккаунты хранятся только в этом браузере.
-    Не используй реальные или важные пароли. Очистка данных
-    браузера может удалить аккаунты. Система не проверяет
-    действительность приглашения и не создаёт аккаунты MAX.
-  </p>
 </main>
 
+<footer>GROUP TESTER MAX · Демонстрационный проект</footer>
+
 <script>
-const $ = id => document.getElementById(id);
-const USERS_KEY = "gtmax_demo_users_v1";
-const SESSION_KEY = "gtmax_demo_session_v1";
-let mode = "register";
+(() => {
+  const $ = id => document.getElementById(id);
+  const USERS_KEY = "gtmax_users_v2";
+  const SESSION_KEY = "gtmax_session_v2";
+  let loginMode = false;
+  let currentUser = null;
+  let lastCheckedUrl = "";
 
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem(USERS_KEY) || "{}"); }
-  catch { return {}; }
-}
-
-function saveUsers(users) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-function switchMode() {
-  mode = mode === "register" ? "login" : "register";
-  $("authTitle").textContent = mode === "register" ? "Создать аккаунт" : "Вход";
-  $("authButton").textContent = mode === "register" ? "Зарегистрироваться" : "Войти";
-  $("switchButton").textContent = mode === "register"
-    ? "Уже есть аккаунт? Войти"
-    : "Нет аккаунта? Зарегистрироваться";
-  $("password").setAttribute("autocomplete", mode === "register" ? "new-password" : "current-password");
-  $("authResult").textContent = "";
-}
-
-function register() {
-  const name = $("username").value.trim();
-  const pass = $("password").value;
-  const users = getUsers();
-
-  if (!/^[a-zA-Z0-9_-]{3,24}$/.test(name)) {
-    $("authResult").textContent = "Логин: 3–24 символа, только латинские буквы, цифры, _ или -.";
-    return;
-  }
-  if (pass.length < 6) {
-    $("authResult").textContent = "Пароль должен содержать минимум 6 символов.";
-    return;
-  }
-
-  if (mode === "register") {
-    if (users[name.toLowerCase()]) {
-      $("authResult").textContent = "Этот логин уже занят на этом устройстве.";
-      return;
-    }
-    users[name.toLowerCase()] = { name, password: pass, tests: 0, history: [] };
-    saveUsers(users);
-  } else {
-    const user = users[name.toLowerCase()];
-    if (!user || user.password !== pass) {
-      $("authResult").textContent = "Неверный логин или пароль.";
-      return;
+  function readUsers() {
+    try {
+      return JSON.parse(localStorage.getItem(USERS_KEY) || "{}");
+    } catch {
+      return {};
     }
   }
 
-  localStorage.setItem(SESSION_KEY, name.toLowerCase());
-  $("password").value = "";
-  showApp();
-}
+  function saveUsers(users) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
 
-function currentUser() {
-  const key = localStorage.getItem(SESSION_KEY);
-  if (!key) return null;
-  const users = getUsers();
-  return users[key] ? { key, user: users[key], users } : null;
-}
+  function message(id, text, type = "") {
+    const el = $(id);
+    el.textContent = text;
+    el.className = "status" + (type ? " " + type : "");
+  }
 
-function showApp() {
-  const session = currentUser();
-  if (!session) {
+  function showAuth(text = "") {
     $("auth").classList.remove("hidden");
-    ["profile","tester","historyCard"].forEach(id => $(id).classList.add("hidden"));
-    return;
+    $("dashboard").classList.add("hidden");
+    $("navUser").textContent = "Демо-платформа";
+    $("authMessage").classList.toggle("hidden", !text);
+    if (text) message("authMessage", text, "error");
   }
-  $("auth").classList.add("hidden");
-  ["profile","tester","historyCard"].forEach(id => $(id).classList.remove("hidden"));
-  $("profileName").textContent = session.user.name;
-  $("totalTests").textContent = session.user.tests;
-  renderHistory(session.user.history);
-}
 
-function logout() {
-  localStorage.removeItem(SESSION_KEY);
-  $("authResult").textContent = "Ты вышел из аккаунта.";
-  showApp();
-}
+  function getUser() {
+    const users = readUsers();
+    return currentUser ? users[currentUser] : null;
+  }
 
-function getInviteLink() {
-  try {
-    const url = new URL($("invite").value.trim());
-    if (url.protocol !== "https:" || url.hostname !== "max.ru" ||
-        !url.pathname.startsWith("/join/") ||
-        url.pathname.length <= 6) return null;
-    return url.href;
-  } catch { return null; }
-}
+  function saveCurrentUser(user) {
+    const users = readUsers();
+    users[currentUser] = user;
+    saveUsers(users);
+  }
 
-function checkLink() {
-  const session = currentUser();
-  if (!session) return;
+  function renderHistory() {
+    const user = getUser();
+    const history = user?.history || [];
+    const root = $("history");
+    root.replaceChildren();
 
-  const link = getInviteLink();
-  let message;
+    if (!history.length) {
+      const p = document.createElement("p");
+      p.textContent = "Пока проверок нет.";
+      root.appendChild(p);
+      return;
+    }
 
-  if (!link) {
-    message = "❌ Неверный формат. Нужна ссылка вида https://max.ru/join/...";
+    history.slice().reverse().forEach(entry => {
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const title = document.createElement("strong");
+      title.textContent = entry.valid ? "Формат похож на ссылку MAX" : "Формат не распознан";
+      div.appendChild(title);
+
+      const url = document.createElement("p");
+      url.textContent = entry.url;
+      div.appendChild(url);
+
+      const date = document.createElement("span");
+      date.className = "small muted";
+      date.textContent = entry.date;
+      div.appendChild(date);
+
+      root.appendChild(div);
+    });
+  }
+
+  function renderDashboard() {
+    const user = getUser();
+    if (!user) {
+      showAuth();
+      return;
+    }
+
+    $("auth").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
+    $("navUser").textContent = currentUser;
+    $("profileName").textContent = currentUser;
+
+    const history = user.history || [];
+    $("totalChecks").textContent = history.length;
+    $("validChecks").textContent = history.filter(x => x.valid).length;
+    $("createdAt").textContent = user.created || "—";
+    renderHistory();
+  }
+
+  function setLoginMode(value) {
+    loginMode = value;
+    $("authTitle").textContent = value ? "Вход в аккаунт" : "Создать аккаунт";
+    $("authSubtitle").textContent = value
+      ? "Введи логин и пароль, которые использовал при регистрации."
+      : "Создай локальный демо-аккаунт.";
+    $("authSubmit").textContent = value ? "Войти" : "Зарегистрироваться";
+    $("switchAuth").textContent = value
+      ? "У меня ещё нет аккаунта"
+      : "У меня уже есть аккаунт";
+    $("password").setAttribute("autocomplete", value ? "current-password" : "new-password");
+    $("authMessage").classList.add("hidden");
+  }
+
+  $("switchAuth").addEventListener("click", () => setLoginMode(!loginMode));
+
+  $("authForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const username = $("username").value.trim();
+    const password = $("password").value;
+    const key = username.toLowerCase();
+    const users = readUsers();
+
+    if (!/^[a-zA-Zа-яА-ЯёЁ0-9_-]{3,24}$/.test(username)) {
+      message("authMessage", "Логин: от 3 до 24 символов, только буквы, цифры, _ или -.", "error");
+      return;
+    }
+
+    if (password.length < 6) {
+      message("authMessage", "Пароль должен содержать не менее 6 символов.", "error");
+      return;
+    }
+
+    if (loginMode) {
+      if (!users[key] || users[key].password !== password) {
+        message("authMessage", "Неверный логин или пароль.", "error");
+        return;
+      }
+    } else {
+      if (users[key]) {
+        message("authMessage", "Такой логин уже существует в этом браузере.", "error");
+        return;
+      }
+
+      users[key] = {
+        password,
+        created: new Date().toLocaleDateString("ru-RU"),
+        history: []
+      };
+      saveUsers(users);
+    }
+
+    currentUser = key;
+    localStorage.setItem(SESSION_KEY, key);
+    $("authForm").reset();
+    renderDashboard();
+  });
+
+  $("logout").addEventListener("click", () => {
+    currentUser = null;
+    localStorage.removeItem(SESSION_KEY);
+    lastCheckedUrl = "";
+    $("inviteUrl").value = "";
+    $("checkResult").classList.add("hidden");
+    $("openActions").classList.add("hidden");
+    setLoginMode(true);
+    showAuth();
+  });
+
+  $("deleteAccount").addEventListener("click", () => {
+    if (!confirm("Удалить демо-аккаунт и его историю из этого браузера?")) return;
+    const users = readUsers();
+    delete users[currentUser];
+    saveUsers(users);
+    localStorage.removeItem(SESSION_KEY);
+    currentUser = null;
+    setLoginMode(false);
+    showAuth("Аккаунт удалён.");
+  });
+
+  function validateInvite(raw) {
+    let parsed;
+    try {
+      parsed = new URL(raw);
+    } catch {
+      return { valid: false, reason: "Введи корректный полный URL, начинающийся с https://." };
+    }
+
+    const host = parsed.hostname.toLowerCase();
+    const hostAllowed = host === "max.ru" || host.endsWith(".max.ru");
+    if (parsed.protocol !== "https:" || !hostAllowed) {
+      return { valid: false, reason: "Ожидается HTTPS-ссылка с домена max.ru." };
+    }
+
+    if (!parsed.pathname.startsWith("/join/") || parsed.pathname.length <= "/join/".length) {
+      return { valid: false, reason: "Адрес должен иметь формат приглашения https://max.ru/join/..." };
+    }
+
+    return { valid: true, reason: "Формат ссылки похож на приглашение MAX. Существование приглашения не подтверждено." };
+  }
+
+  $("checkLink").addEventListener("click", () => {
+    const raw = $("inviteUrl").value.trim();
+    if (!raw) {
+      message("checkResult", "Сначала вставь ссылку.", "error");
+      $("checkResult").classList.remove("hidden");
+      $("openActions").classList.add("hidden");
+      return;
+    }
+
+    const result = validateInvite(raw);
+    lastCheckedUrl = result.valid ? new URL(raw).href : "";
+    const user = getUser();
+
+    user.history = user.history || [];
+    user.history.push({
+      url: raw,
+      valid: result.valid,
+      date: new Date().toLocaleString("ru-RU")
+    });
+    user.history = user.history.slice(-50);
+    saveCurrentUser(user);
+
+    message("checkResult", result.reason, result.valid ? "ok" : "error");
+    $("checkResult").classList.remove("hidden");
+    $("openActions").classList.toggle("hidden", !result.valid);
+    renderDashboard();
+  });
+
+  $("clearLink").addEventListener("click", () => {
+    $("inviteUrl").value = "";
+    $("checkResult").classList.add("hidden");
+    $("openActions").classList.add("hidden");
+    lastCheckedUrl = "";
+  });
+
+  $("openInvite").addEventListener("click", () => {
+    if (!lastCheckedUrl) return;
+    window.open(lastCheckedUrl, "_blank", "noopener,noreferrer");
+  });
+
+  $("copyInvite").addEventListener("click", async () => {
+    if (!lastCheckedUrl) return;
+    try {
+      await navigator.clipboard.writeText(lastCheckedUrl);
+      message("checkResult", "Ссылка скопирована.", "ok");
+    } catch {
+      message("checkResult", "Не удалось скопировать автоматически. Скопируй адрес из поля вручную.", "error");
+    }
+  });
+
+  $("clearHistory").addEventListener("click", () => {
+    if (!confirm("Очистить историю проверок?")) return;
+    const user = getUser();
+    user.history = [];
+    saveCurrentUser(user);
+    renderDashboard();
+  });
+
+  // При загрузке страницы MAX автоматически не открывается.
+  const savedSession = localStorage.getItem(SESSION_KEY);
+  if (savedSession && readUsers()[savedSession]) {
+    currentUser = savedSession;
+    renderDashboard();
   } else {
-    message = "✅ Формат ссылки правильный. Её действительность ещё не проверена.";
+    currentUser = null;
+    setLoginMode(false);
+    showAuth();
   }
-
-  $("testResult").textContent = message;
-
-  const { key, user, users } = session;
-  user.tests++;
-  user.history.unshift({
-    link: $("invite").value.trim(),
-    result: link ? "Формат правильный" : "Неверный формат",
-    date: new Date().toLocaleString("ru-RU")
-  });
-  user.history = user.history.slice(0, 20);
-  users[key] = user;
-  saveUsers(users);
-  showApp();
-}
-
-function openInvite() {
-  const link = getInviteLink();
-  if (!link) {
-    $("testResult").textContent = "Сначала вставь ссылку правильного формата.";
-    return;
-  }
-  location.href = link;
-}
-
-function renderHistory(items) {
-  $("history").replaceChildren();
-  if (!items || !items.length) {
-    $("history").textContent = "Пока проверок нет.";
-    return;
-  }
-
-  items.forEach(item => {
-    const entry = document.createElement("div");
-    entry.className = "result";
-    const date = document.createElement("div");
-    date.textContent = item.date;
-    const status = document.createElement("div");
-    status.textContent = item.result;
-    const link = document.createElement("div");
-    link.textContent = item.link;
-    entry.append(date, status, link);
-    $("history").append(entry);
-  });
-}
-
-function clearHistory() {
-  const session = currentUser();
-  if (!session) return;
-  session.user.history = [];
-  session.users[session.key] = session.user;
-  saveUsers(session.users);
-  renderHistory([]);
-}
-
-try {
-  showApp();
-} catch {
-  $("authResult").textContent = "Браузер не разрешает хранение данных. Попробуй открыть сайт в обычном браузере.";
-}
+})();
 </script>
 </body>
 </html>
