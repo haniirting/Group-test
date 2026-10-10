@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Group Tester MAX</title>
+
+  <style>
+
+    * { box-sizing: border-box; }
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      display: grid;
+
+      place-items: center;
+
+      padding: 20px;
+
+      background: #080b12;
+
+      color: #f4f7ff;
+
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+
+    }
+
+    .panel {
+
+      width: 100%;
+
+      max-width: 430px;
+
+      padding: 25px;
+
+      border: 1px solid #263344;
+
+      border-radius: 22px;
+
+      background: #101722;
+
+      box-shadow: 0 0 35px #00d5ff12;
+
+    }
+
+    h1 { margin: 0 0 8px; font-size: 26px; }
+
+    .sub { color: #98a9bd; margin-bottom: 24px; }
+
+    label {
+
+      display: block;
+
+      margin-bottom: 9px;
+
+      color: #cbd7e7;
+
+    }
+
+    input {
+
+      width: 100%;
+
+      padding: 14px;
+
+      border: 1px solid #34465b;
+
+      border-radius: 12px;
+
+      background: #080e17;
+
+      color: white;
+
+      font-size: 15px;
+
+      outline: none;
+
+    }
+
+    input:focus { border-color: #00d5ff; }
+
+    button {
+
+      width: 100%;
+
+      margin-top: 12px;
+
+      padding: 14px;
+
+      border: 0;
+
+      border-radius: 12px;
+
+      background: #00d5ff;
+
+      color: #041018;
+
+      font-size: 15px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+    }
+
+    button.secondary {
+
+      background: #202d3d;
+
+      color: #f4f7ff;
+
+    }
+
+    .result {
+
+      margin-top: 18px;
+
+      padding: 14px;
+
+      border-radius: 12px;
+
+      background: #080e17;
+
+      color: #b8c8dc;
+
+      line-height: 1.5;
+
+      overflow-wrap: anywhere;
+
+    }
+
+    .small {
+
+      margin-top: 18px;
+
+      color: #8293a8;
+
+      font-size: 12px;
+
+      line-height: 1.5;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <main class="panel">
+
+    <h1>⚡ Group Tester MAX</h1>
+
+    <div class="sub">Проверка ссылок-приглашений</div>
+
+    <label for="invite">Ссылка на группу MAX</label>
+
+    <input
+
+      id="invite"
+
+      type="url"
+
+      placeholder="https://max.ru/join/..."
+
+      autocomplete="url"
+
+    >
+
+    <button onclick="checkLink()">Проверить ссылку</button>
+
+    <button class="secondary" onclick="openInvite()">
+
+      Открыть приглашение
+
+    </button>
+
+    <div id="result" class="result">
+
+      Вставь ссылку, чтобы начать проверку.
+
+    </div>
+
+    <div class="small">
+
+      Проверяется только формат адреса. Для подтверждения
+
+      действительности приглашения открой его в MAX.
+
+      Никакие аккаунты автоматически не создаются.
+
+    </div>
+
+  </main>
+
+  <script>
+
+    const invite = document.getElementById("invite");
+
+    const result = document.getElementById("result");
+
+    function getValidLink() {
+
+      const value = invite.value.trim();
+
+      try {
+
+        const url = new URL(value);
+
+        if (
+
+          url.protocol !== "https:" ||
+
+          url.hostname !== "max.ru" ||
+
+          !url.pathname.startsWith("/join/") ||
+
+          url.pathname.length <= "/join/".length
+
+        ) {
+
+          return null;
+
+        }
+
+        return url.href;
+
+      } catch {
+
+        return null;
+
+      }
+
+    }
+
+    function checkLink() {
+
+      if (!invite.value.trim()) {
+
+        result.textContent = "Вставь ссылку на приглашение.";
+
+        return;
+
+      }
+
+      if (!getValidLink()) {
+
+        result.textContent =
+
+          "❌ Неверный формат. Ожидается ссылка вида https://max.ru/join/...";
+
+        return;
+
+      }
+
+      result.textContent =
+
+        "✅ Формат ссылки правильный. Работает ли приглашение, нужно проверить в MAX.";
+
+    }
+
+    function openInvite() {
+
+      const link = getValidLink();
+
+      if (!link) {
+
+        result.textContent = "Сначала вставь ссылку правильного формата.";
+
+        return;
+
+      }
+
+      window.location.href = link;
+
+    }
+
+    invite.addEventListener("keydown", event => {
+
+      if (event.key === "Enter") checkLink();
+
+    });
+
+  </script>
+
+</body>
+
+</html>
